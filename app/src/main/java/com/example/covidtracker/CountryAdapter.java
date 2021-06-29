@@ -19,7 +19,7 @@ import com.squareup.picasso.Picasso;
 
 import com.example.covidtracker.API.CoronaApi;
 import com.example.covidtracker.API.CoronaService;
-import com.example.covidtracker.Data.CountriesResponse;
+import com.example.covidtracker.Data.Countries;
 
 
 import java.util.ArrayList;
@@ -31,12 +31,12 @@ import retrofit2.Response;
 
 public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryHolder> implements Filterable {
 
-    private List<CountriesResponse> countriesList;
-    private List<CountriesResponse> countriesListed;
+    private List<Countries> countriesList;
+    private List<Countries> countriesListed;
     private Context context;
 
 
-    public void setCountryList(Context context, final List<CountriesResponse> countriesList) {
+    public void setCountryList(Context context, final List<Countries> countriesList) {
         this.context = context;
         if (this.countriesList == null) {
             this.countriesList = countriesList;
@@ -62,9 +62,9 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryH
                 @Override
                 public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
 
-                    CountriesResponse newMovie = CountryAdapter.this.countriesList.get(oldItemPosition);
+                    Countries newMovie = CountryAdapter.this.countriesList.get(oldItemPosition);
 
-                    CountriesResponse oldMovie = countriesList.get(newItemPosition);
+                    Countries oldMovie = countriesList.get(newItemPosition);
 
                     return newMovie.getCountry() == oldMovie.getCountry();
                 }
@@ -100,10 +100,10 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryH
                         CoronaApi.getRetrofitInstance().create(CoronaService.class);
 
 
-                Call<CountriesResponse> call = coronaService.getCountryInfo(countriesListed.get(position).getCountry());
-                call.enqueue(new Callback<CountriesResponse>() {
+                Call<Countries> call = coronaService.getCountryInfo(countriesListed.get(position).getCountry());
+                call.enqueue(new Callback<Countries>() {
                     @Override
-                    public void onResponse(Call<CountriesResponse> call, Response<CountriesResponse> response) {
+                    public void onResponse(Call<Countries> call, Response<Countries> response) {
 
 
                         //System.out.println("response size : "+responseList.size());
@@ -129,7 +129,7 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryH
                     }
 
                     @Override
-                    public void onFailure(Call<CountriesResponse> call, Throwable t) {
+                    public void onFailure(Call<Countries> call, Throwable t) {
                         Log.d("Error", t.getMessage());
                     }
                 });
@@ -159,8 +159,8 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryH
                 if (charString.isEmpty()) {
                     countriesListed = countriesList;
                 } else {
-                    List<CountriesResponse> filteredList = new ArrayList<>();
-                    for (CountriesResponse movie : countriesList) {
+                    List<Countries> filteredList = new ArrayList<>();
+                    for (Countries movie : countriesList) {
                         if (movie.getCountry().toLowerCase().contains(charString.toLowerCase())) {
                             filteredList.add(movie);
                         }
@@ -175,7 +175,7 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryH
 
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                countriesListed = (ArrayList<CountriesResponse>) filterResults.values;
+                countriesListed = (ArrayList<Countries>) filterResults.values;
 
                 notifyDataSetChanged();
             }

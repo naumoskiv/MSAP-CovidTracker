@@ -1,6 +1,6 @@
 package com.example.covidtracker.Data;
 
-public class AllCountriesResponse {
+public class AllCountries {
 
     private String continent;
 

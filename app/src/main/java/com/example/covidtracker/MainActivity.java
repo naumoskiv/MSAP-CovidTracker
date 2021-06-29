@@ -12,11 +12,9 @@ import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 ;
-import  com.example.covidtracker.R;
 import  com.example.covidtracker.API.CoronaApi;
 import  com.example.covidtracker.API.CoronaService;
-import  com.example.covidtracker.Data.CountriesResponse;
-import  com.example.covidtracker.CountryAdapter;
+import com.example.covidtracker.Data.Countries;
 
 
 import java.util.ArrayList;
@@ -32,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private SearchView searchView;
     private RecyclerView recyclerView;
     private CountryAdapter countryAdapter;
-    private List<CountriesResponse> countriesResponseList;
+    private List<Countries> countriesList;
 
 
     @Override
@@ -46,26 +44,26 @@ public class MainActivity extends AppCompatActivity {
         countryAdapter = new CountryAdapter();
         recyclerView.setAdapter(countryAdapter);
 
-        countriesResponseList = new ArrayList<>();
+        countriesList = new ArrayList<>();
 
         CoronaService coronaService =
                 CoronaApi.getRetrofitInstance().create(CoronaService.class);
 
 
-        Call<List<CountriesResponse>> call = coronaService.getCountries();
-        call.enqueue(new Callback<List<CountriesResponse>>() {
+        Call<List<Countries>> call = coronaService.getCountries();
+        call.enqueue(new Callback<List<Countries>>() {
             @Override
-            public void onResponse(Call<List<CountriesResponse>> call, Response<List<CountriesResponse>> response) {
+            public void onResponse(Call<List<Countries>> call, Response<List<Countries>> response) {
 
-                countriesResponseList = response.body();
+                countriesList = response.body();
 
 
-                if (countriesResponseList != null) {
-                    for (CountriesResponse countriesResponse : countriesResponseList) {
+                if (countriesList != null) {
+                    for (Countries countries : countriesList) {
 
-                        System.out.println("Country Name : " + countriesResponse.getCountry() + " - Death Count : " + countriesResponse.getDeaths() + "\n");
+                        System.out.println("Country Name : " + countries.getCountry() + " - Death Count : " + countries.getDeaths() + "\n");
 
-                        countryAdapter.setCountryList(getApplicationContext(), countriesResponseList);
+                        countryAdapter.setCountryList(getApplicationContext(), countriesList);
 
 
                     }
@@ -75,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<CountriesResponse>> call, Throwable t) {
+            public void onFailure(Call<List<Countries>> call, Throwable t) {
                 Log.d("Error", t.getMessage());
             }
         });

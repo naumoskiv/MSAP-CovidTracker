@@ -1,6 +1,6 @@
 package com.example.covidtracker.Data;
 
-public class CountriesResponse {
+public class Countries {
 
     private String country;
     private String recovered;
